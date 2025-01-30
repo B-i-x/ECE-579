@@ -1,0 +1,1 @@
+dot -Tpng build/mini_bnb_tree.dot -o build/mini_bnb_tree.png 

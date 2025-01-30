@@ -14,6 +14,9 @@ for pre, fill, node in RenderTree(root):
     print(f"{pre}{node.name}")
 
 output_dir = os.path.join(os.getcwd(), "build")
-picture_path = os.path.join(output_dir, "mini_bnb_tree.png")
-# Graphviz view
-DotExporter(root).to_picture(picture_path)
+os.makedirs(output_dir, exist_ok=True)  # Ensures the directory exists
+dot_path = os.path.join(output_dir, "mini_bnb_tree.dot")
+
+# Export to DOT file
+DotExporter(root).to_dotfile(dot_path)
+print("DOT file created at:", dot_path)
