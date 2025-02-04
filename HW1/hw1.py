@@ -7,20 +7,28 @@ from collections import namedtuple
 
 # Define the item structure using namedtuple for convenience
 Item = namedtuple('Item', 'name value weight')
+# items = [
+#     Item('A', 14, 2),
+#     Item('B', 15, 3),
+#     Item('C', 18, 3),
+#     Item('D', 24, 4),
+#     Item('E', 28, 7)
+# ]
+
 items = [
     Item('A', 14, 2),
-    Item('B', 15, 3),
-    Item('C', 18, 3),
     Item('D', 24, 4),
+    Item('C', 18, 3),
+    Item('B', 15, 3),
     Item('E', 28, 7)
 ]
 
 total_capacity = 10
 
-def sort_items_by_value_per_weight(items):
-    return sorted(items, key=lambda item: item.value / item.weight, reverse=True)
+# def sort_items_by_value_per_weight(items):
+#     return sorted(items, key=lambda item: item.value / item.weight, reverse=True)
 
-items = sort_items_by_value_per_weight(items)
+# items = sort_items_by_value_per_weight(items)
 # print(items)
 def calculate_future_value(node_value, node_weight, remaining_items):
     remaining_capacity = total_capacity - node_weight
@@ -54,7 +62,7 @@ def search_node(node, remaining_items):
     current_item = remaining_items[0]
     new_remaining_items = remaining_items[1:]
     # print(new_remaining_items)
-    if node.weight + current_item.weight < total_capacity:
+    if node.weight + current_item.weight <= total_capacity:
         addition_index += 1
 
         future_value_str_, ev_value = calculate_future_value(
@@ -104,7 +112,7 @@ for pre, fill, node in RenderTree(root):
 # Setup directory and export the tree to a DOT file
 output_dir = os.path.join(os.getcwd(), "build")
 os.makedirs(output_dir, exist_ok=True)
-dot_path = os.path.join(output_dir, "hw1.dot")
+dot_path = os.path.join(output_dir, "hw1v2.dot")
 
 max_value = max(item.value for item in items)
 # Function to determine node color based on value using a gradient from white to green
