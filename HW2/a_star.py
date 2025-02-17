@@ -381,13 +381,6 @@ def run_experiment_2():
         path_length = len(path)
         print(f"Path steps to goal (m-1, {j}): {path_length}, path distance: {calc_path_length(path)}")
 
-        # solved_maze = maze.copy()
-        # for (row_idx, col_idx) in path:
-        #     solved_maze[row_idx][col_idx] = '2'
-        # print(f"Solved maze for goal (m-1, {j}):")
-        # print_maze(solved_maze)
-
-
 
 """**Running Experiment 3**"""
 
@@ -398,7 +391,7 @@ def run_experiment_3():
     m = 41
     n = 41
 
-    seeds = range(200, 300)
+    seeds = range(200, 1200)
 
     path_lengths = []
 
@@ -413,10 +406,9 @@ def run_experiment_3():
     average_length = sum(path_lengths) / len(path_lengths)
     print(f"Maze size: {m}x{n}")
     print(f"Used seeds from 200 to 299 (100 total).")
-    print(f"Average path length over 100 different seeds: {average_length:.2f}")
+    print(f"Average path length over 1000 different seeds: {average_length:.2f}")
 
-
-    plt.title("Histogram of Path Lengths Over 100 Seeds")
+    plt.title("Histogram of Path Lengths Over 1000 Seeds")
     plt.xlabel("Path Length")
     plt.ylabel("Frequency")
     plt.hist(path_lengths, bins=20, edgecolor='black')
@@ -424,6 +416,6 @@ def run_experiment_3():
 
 
 if __name__ == "__main__":
-    run_experiment_1()
-    run_experiment_2()
+    # run_experiment_1()
+    # run_experiment_2()
     run_experiment_3()
