@@ -62,7 +62,6 @@ print_maze(maze)
 """We try to make the maze problem not trivial. For example, for the even lines, 0, 2, 4,..., we randomly select 10 tiles to make them '1'."""
 
 import random
-random.seed(100)
 
 for i in range(m):
   if i % 2 ==0 and i < m-4 and i > 0:
@@ -293,7 +292,8 @@ def run_simulation(maze, m, n):
 """finally we define a function to run the experiment"""
 
 def run_experiment_1(m, n):
-  
+  random.seed(100)
+
   m = 41
   n = 41
   maze = create_maze(m, n)
