@@ -349,7 +349,6 @@ def run_experiment_3():
 
   seeds = range(200, 300)
 
-  total_path_length = 0
   path_lengths = []
 
   # Run the simulation for each seed
@@ -365,11 +364,17 @@ def run_experiment_3():
   print(f"Used seeds from 200 to 299 (100 total).")
   print(f"Average path length over 100 different seeds: {average_length:.2f}")
 
+  # Get the sorted unique values
+  unique_vals = sorted(set(path_lengths))
+  bins = [val - 0.5 for val in unique_vals] + [unique_vals[-1] + 0.5]
   # Plot histogram of path lengths
-  plt.hist(path_lengths, bins=10, edgecolor='black')
+  counts, edges, patches = plt.hist(path_lengths, bins=bins, edgecolor='black')
+  bin_centers = 0.5 * (edges[:-1] + edges[1:])
+
   plt.title('Histogram of Path Lengths Over 100 Seeds')
   plt.xlabel('Path Length')
   plt.ylabel('Frequency')
+  plt.xticks(bin_centers, [str(int(center)) for center in bin_centers])
   plt.show()
 
 if __name__ == "__main__":
