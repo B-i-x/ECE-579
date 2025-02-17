@@ -350,22 +350,22 @@ def run_experiment_3():
   seeds = range(200, 300)
 
   total_path_length = 0
+  path_lengths = []
 
   # Run the simulation for each seed
   for s in seeds:
-      random.seed(s)
-      maze = create_maze(m, n)
-      path = run_simulation(maze, m-1, n-1)  # path from (0,0) to (m-1, n-1)
-      total_path_length += len(path)
+    random.seed(s)
+    maze = create_maze(m, n)
+    path = run_simulation(maze, m-1, n-1)  # path from (0,0) to (m-1, n-1)
+    path_lengths.append(len(path))
 
   # Compute average path length
-  average_length = total_path_length / len(seeds)
+  average_length = sum(path_lengths) / len(path_lengths)
   print(f"Maze size: {m}x{n}")
   print(f"Used seeds from 200 to 299 (100 total).")
   print(f"Average path length over 100 different seeds: {average_length:.2f}")
 
   # Plot histogram of path lengths
-  plt.figure(figsize=(8, 5))
   plt.hist(path_lengths, bins=10, edgecolor='black')
   plt.title('Histogram of Path Lengths Over 100 Seeds')
   plt.xlabel('Path Length')
