@@ -325,6 +325,14 @@ def run_simulation(maze, m, n):
 
     return path
 
+def calc_path_length(path):
+    distance = 0
+    for step in path[:-1]:
+        next_step = path[path.index(step) + 1]
+
+        distance += euclidean_distance(step, next_step)
+
+    return round(distance, 1)
 
 """finally we define a function to run the experiment"""
 
@@ -338,7 +346,7 @@ def run_experiment_1():
     print(f"maze size: {m}x{n}")
     print_maze(maze)
 
-    path = run_simulation(maze, m, n)
+    path = run_simulation(maze, m-1, n-1)
 
     solved_maze = maze.copy()
 
@@ -347,8 +355,7 @@ def run_experiment_1():
     print(f"Solved maze:")
 
     print_maze(solved_maze)
-
-    print(f"Path length: {len(path)}")
+    print(f"path length: {calc_path_length(path)}")
 
 
 """**Running Experiment 2**"""
@@ -372,13 +379,14 @@ def run_experiment_2():
     for j in range(n):
         path = run_simulation(maze, m - 1, j)
         path_length = len(path)
-        print(f"Path length to goal (m-1, {j}): {path_length}")
+        print(f"Path steps to goal (m-1, {j}): {path_length}, path distance: {calc_path_length(path)}")
 
         # solved_maze = maze.copy()
         # for (row_idx, col_idx) in path:
         #     solved_maze[row_idx][col_idx] = '2'
         # print(f"Solved maze for goal (m-1, {j}):")
         # print_maze(solved_maze)
+
 
 
 """**Running Experiment 3**"""
@@ -399,7 +407,7 @@ def run_experiment_3():
         random.seed(s)
         maze = create_maze(m, n)
         path = run_simulation(maze, m - 1, n - 1)  # path from (0,0) to (m-1, n-1)
-        path_lengths.append(len(path))
+        path_lengths.append(calc_path_length(path))
 
     # Compute average path length
     average_length = sum(path_lengths) / len(path_lengths)
@@ -407,19 +415,15 @@ def run_experiment_3():
     print(f"Used seeds from 200 to 299 (100 total).")
     print(f"Average path length over 100 different seeds: {average_length:.2f}")
 
-    # Get the sorted unique values
-    unique_vals = sorted(set(path_lengths))
-    bins = [val - 0.5 for val in unique_vals] + [unique_vals[-1] + 0.5]
-    # Plot histogram of path lengths
-    counts, edges, patches = plt.hist(path_lengths, bins=bins, edgecolor="black")
-    bin_centers = 0.5 * (edges[:-1] + edges[1:])
 
     plt.title("Histogram of Path Lengths Over 100 Seeds")
     plt.xlabel("Path Length")
     plt.ylabel("Frequency")
-    plt.xticks(bin_centers, [str(int(center)) for center in bin_centers])
+    plt.hist(path_lengths, bins=20, edgecolor='black')
     plt.show()
 
 
 if __name__ == "__main__":
+    run_experiment_1()
+    run_experiment_2()
     run_experiment_3()
