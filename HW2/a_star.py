@@ -80,7 +80,7 @@ Define the **get_neighbors** function to facilitate our search. For each tile, c
 
 def get_neighbors(maze, i, j):
     neighbors = []
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1,-1), (-1, 1), (1, -1), (1, 1)]
 
     for di, dj in directions:
         ni, nj = i + di, j + dj
@@ -114,12 +114,19 @@ print_maze2(maze[0:5, 0:5], (0,1))
 print('the neighbors of (0,2) are ', get_neighbors(maze, 0, 2))
 print_maze2(maze[0:5, 0:5], (0,2))
 
-"""**Step 2:**\
-define the **manhattan_distance** function.
-"""
+# """**Step 2:**\
+# define the **manhattan_distance** function.
+# """
 
-def manhattan_distance(a, b):
-    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+# def manhattan_distance(a, b):
+#     return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+"""**Step 2:**
+define the **euclidean_distance** function.
+"""
+import math
+def euclidean_distance(a, b):
+    return math.sqrt(abs(a[0] - b[0]) ** 2 + abs(a[1] - b[1]) ** 2)
 
 """**Step 3:**\
 assign the start point to be (0,0), the goal point is (m-1, 0)
@@ -150,7 +157,7 @@ print(class_1["id3"])
 open_list = [start] # a list of points that we need to compare.
 came_from = {}  # to record where a point came from, i.e, its previous point.
 g_score = {start: 0}  # dictionary, (0,0): 0, (0,1):1
-f_score = {start: manhattan_distance(start, goal)}  # dictionary, (0,0): 0, (0,1):1
+f_score = {start: euclidean_distance(start, goal)}  # dictionary, (0,0): 0, (0,1):1
 visited = [] # a list of visited points
 
 step = 0
@@ -191,7 +198,7 @@ while open_list:
     if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
         came_from[neighbor] = current # record where this neighor came from, for retriving final path
         g_score[neighbor] = tentative_g_score
-        f_score[neighbor] = tentative_g_score + manhattan_distance(neighbor, goal)
+        f_score[neighbor] = tentative_g_score + euclidean_distance(neighbor, goal)
         if neighbor not in open_list:
             open_list.append(neighbor)
     if step < 5:
