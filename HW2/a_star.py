@@ -291,7 +291,7 @@ def run_simulation(maze, m, n):
 
 """finally we define a function to run the experiment"""
 
-def run_experiment_1(m, n):
+def run_experiment_1():
   random.seed(100)
 
   m = 41
@@ -316,7 +316,7 @@ def run_experiment_1(m, n):
 
 """with the experiment 1 function, we can easily run the experiment 2 with some quick modifications"""
 
-def run_experiment_2(m, n):
+def run_experiment_2():
   """
   For each column j in [0..n-1], compute the path length from (0,0) to (m-1, j).
   """
@@ -340,6 +340,37 @@ def run_experiment_2(m, n):
     # print(f"Solved maze for goal (m-1, {j}):")
     # print_maze(solved_maze)
 
+"""**Running Experiment 3**"""
+
+def run_experiment_3():
+  import matplotlib.pyplot as plt
+  m = 41
+  n = 41
+
+  seeds = range(200, 300)
+
+  total_path_length = 0
+
+  # Run the simulation for each seed
+  for s in seeds:
+      random.seed(s)
+      maze = create_maze(m, n)
+      path = run_simulation(maze, m-1, n-1)  # path from (0,0) to (m-1, n-1)
+      total_path_length += len(path)
+
+  # Compute average path length
+  average_length = total_path_length / len(seeds)
+  print(f"Maze size: {m}x{n}")
+  print(f"Used seeds from 200 to 299 (100 total).")
+  print(f"Average path length over 100 different seeds: {average_length:.2f}")
+
+  # Plot histogram of path lengths
+  plt.figure(figsize=(8, 5))
+  plt.hist(path_lengths, bins=10, edgecolor='black')
+  plt.title('Histogram of Path Lengths Over 100 Seeds')
+  plt.xlabel('Path Length')
+  plt.ylabel('Frequency')
+  plt.show()
 
 if __name__ == "__main__":
-  run_experiment_2(m, n)
+  run_experiment_3()
