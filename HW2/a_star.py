@@ -251,7 +251,7 @@ def create_maze(m, n):
 def run_simulation(maze, m, n):
   ## define the start point and goal point
   start = (0,0)
-  goal = (m-1, n-1)
+  goal = (m, n)
 
   # Example of a Python dictionary
   open_list = [start] # a list of points that we need to compare.
@@ -312,5 +312,34 @@ def run_experiment_1(m, n):
 
   print(f"Path length: {len(path)}")
 
+"""**Running Experiment 2**"""
+
+"""with the experiment 1 function, we can easily run the experiment 2 with some quick modifications"""
+
+def run_experiment_2(m, n):
+  """
+  For each column j in [0..n-1], compute the path length from (0,0) to (m-1, j).
+  """
+  random.seed(100)  # Ensure reproducible results
+  m = 41
+  n = 41
+  # 1. Create the maze
+  maze = create_maze(m, n)
+  print(f"maze size: {m}x{n}")
+  print_maze(maze)
+
+  # 2. For each goal (m-1, j), find and record the path length
+  for j in range(n):
+    path = run_simulation(maze, m-1, j)  
+    path_length = len(path)
+    print(f"Path length to goal (m-1, {j}): {path_length}")
+
+    # solved_maze = maze.copy()
+    # for (row_idx, col_idx) in path:
+    #     solved_maze[row_idx][col_idx] = '2'
+    # print(f"Solved maze for goal (m-1, {j}):")
+    # print_maze(solved_maze)
+
+
 if __name__ == "__main__":
-  run_experiment_1(m, n)
+  run_experiment_2(m, n)
