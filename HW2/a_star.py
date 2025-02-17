@@ -80,6 +80,7 @@ Define the **get_neighbors** function to facilitate our search. For each tile, c
 
 def get_neighbors(maze, i, j):
     neighbors = []
+    """In order to consider the diagonal neighbors, we add 4 more directions of (-1,-1), (-1, 1), (1, -1), (1, 1)"""
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1,-1), (-1, 1), (1, -1), (1, 1)]
 
     for di, dj in directions:
@@ -208,7 +209,7 @@ while open_list:
     print('we should consider to explore the openlist ', open_list)
     print('and they have the f scores: ', {key: f_score[key] for key in f_score if key in open_list})
 
-"""**Last step.**
+"""**Results**
 print the path on the map
 """
 
@@ -219,3 +220,97 @@ maze2 = maze.copy()
 for i, j in path:
   maze2[i][j] = '2'
 print_maze(maze2)
+
+"""**Running Experiment 1**
+The length of the path between the start point (0, 0) and the goal point
+(m - 1, n - 1), where m, n are the height & width of the map, and (m -
+1, n - 1) is the bottom right corner of the map
+"""
+"""first we make a function to create the maze"""
+
+def create_maze(m, n):
+  maze = np.full((m, n), '0')
+  for i in range(m):
+    if i % 2 == 0:
+      maze[i] = np.full(n, '0') # the even lines are all zero
+    else:
+      for j in range(n):
+        if j % 2 == 0:  # the odd lines are 010101...
+          maze[i][j] = '1'
+        else:
+          maze[i][j] = '0'
+          
+  for i in range(m):
+        if i % 2 ==0 and i < m-4 and i > 0:
+            x = random.sample(range(0, n), 10)
+            for j in range(10):
+                maze[i][x[j]] = '1'
+  return maze
+
+"""second we define a function to run the whole simulation the path length"""
+
+def run_simulation(maze, m, n):
+  ## define the start point and goal point
+  start = (0,0)
+  goal = (m-1, n-1)
+
+  # Example of a Python dictionary
+  open_list = [start] # a list of points that we need to compare.
+  came_from = {}  # to record where a point came from, i.e, its previous point.
+  g_score = {start: 0}  # dictionary, (0,0): 0, (0,1):1
+  f_score = {start: euclidean_distance(start, goal)}  # dictionary, (0,0): 0, (0,1):1
+  visited = [] # a list of visited points
+
+  step = 0
+  path = []
+
+  while open_list:
+      step = step + 1
+      current = min(open_list, key=lambda x: f_score.get(x, float('inf')))  # find the points with minimal f score
+      open_list.remove(current) # we remove the current point from open_list because we don't need to further consider it
+
+      if current == goal:
+          while current in came_from:
+              path.append(current)
+              current = came_from[current]
+          path.append(start)
+          path.reverse()
+          break # stop the algorithm
+
+      visited.append(current)  # record the current point is visited
+      for neighbor in get_neighbors(maze, current[0], current[1]):
+          tentative_g_score = g_score[current] + 1
+
+          if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+              came_from[neighbor] = current # record where this neighor came from, for retriving final path
+              g_score[neighbor] = tentative_g_score
+              f_score[neighbor] = tentative_g_score + euclidean_distance(neighbor, goal)
+              if neighbor not in open_list:
+                  open_list.append(neighbor)
+
+  return path
+
+"""finally we define a function to run the experiment"""
+
+def run_experiment_1(m, n):
+  
+  m = 41
+  n = 41
+  maze = create_maze(m, n)
+  print(f"maze size: {m}x{n}")
+  print_maze(maze)
+
+  path = run_simulation(maze, m, n)
+
+  solved_maze = maze.copy()
+
+  for i, j in path:
+    solved_maze[i][j] = '2'
+  print(f"Solved maze:")
+
+  print_maze(solved_maze)
+
+  print(f"Path length: {len(path)}")
+
+if __name__ == "__main__":
+  run_experiment_1(m, n)
